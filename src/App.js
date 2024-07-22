@@ -9,7 +9,8 @@ function App() {
       <div className="App">
         <Routes>
           <Route exact path="/" element={<Article />} />
-          <Route path="/post/:slug" element={<ArticleDetail />} />
+          <Route exact path="/article" element={<Article />} />
+          <Route path="/article/:slug" element={<ArticleDetail />} />
         </Routes>
       </div>
     </Router>

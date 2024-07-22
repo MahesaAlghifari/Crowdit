@@ -1,71 +1,76 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Posts from '../../Data/Posts';
 import Breadcrumb from './components/Breadcrumb';
 import Newsletter from '../../Components/NewsLetter';
+import AuthorCard from './components/AuthorCard';
+import { splitTextByWordCount } from '../../Utils/Utils'; // Impor fungsi dari file utils
+import Header from '../../Components/Header';
 
 export default function ArticleDetail() {
   const { slug } = useParams();
-  const navigate = useNavigate();
   const post = Posts.find(p => p.slug === slug);
 
   if (!post) {
     return <div>Article not found</div>;
   }
 
+  const paragraphs = splitTextByWordCount(post.description);
+
   return (
     <>
-      <img src={post.postImageUrl} alt={post.title} className="w-full h-48 object-cover" />
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-10 ">
+      <div>
 
+        <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1854&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt={post.title} className="w-full h-56 object-cover " />
 
-        <div className='flex'>
-          <div className='w-1/5'>
-            <div className="flex bg-white items-center justify-center flex-col p-6 py-6 rounded-xl shadow-md -mt-32">
-              <div className="group relative text-center">
-                <img
-                  src={post.author.imageUrl}
-                  alt=""
-                  className="h-24 w-24 rounded-full object-cover mx-auto bg-gray-50 "
-                />
-                <div className="text-sm leading-6 mt-4">
-                  <p className="font-semibold text-gray-900">
-                    <a href="#">
-                      <span className="absolute inset-0"></span>
-                      {post.author.name}
-                    </a>
-                  </p>
-                  <p className="text-gray-600">{post.author.role}</p>
-                </div>
-                <button
-                  onClick={() => navigate(-1)}
-                  className="text-xs mt-2 bg-blue-500 text-white py-2 px-4 rounded"
-                >
-                  View Profile
-                </button>
-                <p className="mt-6 text-justify text-sm leading-5 text-gray-600">
-                  {post.author.name} is a dedicated professional with a passion for technology and innovation.
-                </p>
-              </div>
-              <div className="text-xs mt-6 text-gray-600">
-                Joined : <time dateTime={post.datetime}>{post.date}</time>
-              </div>
-              <div className="relative mt-4 flex items-center gap-x-4"></div>
-            </div>
+      </div>
+
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-10">
+        <div className="flex flex-col md:flex-row">
+
+          {/* Card Author for Desktop */}
+          <div className="hidden md:block md:w-1/5">
+            <AuthorCard author={post.author} date={post.date} />
           </div>
+          {/* End Card Author for Desktop */}
 
-
-          <div className='w-4/5'>
+          <div className="w-full md:w-4/5">
             <article className="mx-auto">
-              <div className="ps-20">
+              <div className="md:ps-20">
                 <Breadcrumb postTitle={post.title} />
-                <h1 className="text-3xl mt-4 font-bold text-gray-900">{post.title}</h1>
-                <div className="text-sm mt-2 text-gray-600">
-                  Upload : <time dateTime={post.datetime}>{post.date}</time>
+                <h1 className="text-3xl mt-8 font-bold text-gray-900">{post.title}</h1>
+
+                {/* Author Info for Mobile */}
+                <div className="block md:hidden flex items-center mb-4">
+                  <img
+                    src={post.author.imageUrl}
+                    alt={post.author.name}
+                    className="h-16 w-16 rounded-full object-cover"
+                  />
+                  <div className="ml-4">
+                    <p className="text-lg font-semibold text-gray-900">{post.author.name}</p>
+                    <p className="text-gray-600">{post.author.role}</p>
+                  </div>
                 </div>
+                {/* End Author Info for Mobile */}
+
+
+
                 <img src={post.postImageUrl} alt={post.title} className="w-full py-6 h-96 object-cover rounded-2xl" />
-                <p className="mt-2 text-gray-600 text-justify">{post.description}</p>
-                <div className="flex items-center gap-x-4">
+
+                {/* Menampilkan paragraf-paragraf */}
+                {paragraphs.map((para, index) => (
+                  <p key={index} className="mt-2 text-gray-600 text-justify indent-paragraphs">
+                    {para}
+                  </p>
+                ))}
+
+                  <div className='py-3'></div>
+                  <hr className=" border-t  border-gray-300" />
+                <div className="flex items-center mt-4 space-x-4">
+                  <div className="text-sm text-gray-500">
+                    Upload : <time dateTime={post.datetime}>{post.date}</time>
+                  </div>
                 </div>
               </div>
             </article>

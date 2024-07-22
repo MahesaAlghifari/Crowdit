@@ -2,3 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* styles.css atau tailwind.css */
+.indent-first-line {
+    text-indent: 2rem; /* Sesuaikan ukuran indentasi sesuai kebutuhan */
+  }
+  
+  /* styles.css atau tailwind.css */
+.indent-paragraphs {
+    text-indent: 2rem; /* Sesuaikan ukuran indentasi sesuai kebutuhan */
+  }
+  
